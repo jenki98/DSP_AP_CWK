@@ -1,0 +1,55 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "glm::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glm-Debug-45f426c976c5ad7e0006.json",
+					"name" : "glm",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/callu/Documents/Master Repos/Audio/groupCoursework/CustomDSP/OpenGLTemplate/include/glm/out/build/x64-Debug",
+		"source" : "D:/callu/Documents/Master Repos/Audio/groupCoursework/CustomDSP/OpenGLTemplate/include/glm"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
