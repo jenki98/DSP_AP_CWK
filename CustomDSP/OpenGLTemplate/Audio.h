@@ -2,6 +2,8 @@
 #include <windows.h>									// Header File For The Windows Library
 #include "./include/fmod_studio/fmod.hpp"
 #include "./include/fmod_studio/fmod_errors.h"
+#include "CircularBuffer.h"
+
 
 
 

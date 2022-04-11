@@ -7,6 +7,14 @@ I've made these two functions non-member functions
 */
 
 // Check for error
+
+typedef struct
+{
+	float volume_linear;
+	float* buffer;
+} mydsp_data_t;
+
+
 void FmodErrorCheck(FMOD_RESULT result)
 {
 	if (result != FMOD_OK) {
@@ -15,26 +23,83 @@ void FmodErrorCheck(FMOD_RESULT result)
 		// Warning: error message commented out -- if headphones not plugged into computer in lab, error occurs
 	}
 }
+int numChannels = 2;
+
+CCircularBuffer buffer(4096 * numChannels);
+
+
+FMOD_RESULT F_CALLBACK DSPCallbackDelay(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
+	unsigned int length, int inchannels, int* outchannels)
+{
+	for (unsigned int samp = 0; samp < length; samp++)
+	{
+		for (int chan = 0; chan < *outchannels; chan++)
+		{
+			outbuffer[(samp * *outchannels) + chan] = 0.5 * buffer.AtPosition(samp * inchannels + chan) +
+				0.5 * inbuffer[samp * inchannels + chan];
+			// store incoming new sample into circular buffer
+			buffer.Put(outbuffer[(samp * *outchannels) + chan]);
+		}
+	}
+	return FMOD_OK;
+}
+
+FMOD_RESULT F_CALLBACK DSPCallbackAveragingFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
+	unsigned int length, int inchannels, int* outchannels)
+{
+	for (unsigned int samp = 0; samp < length; samp++)
+	{
+		for (int chan = 0; chan < *outchannels; chan++)
+		{
+			buffer.Put(inbuffer[samp * inchannels + chan]);
+			outbuffer[(samp * *outchannels) + chan] =
+				(inbuffer[samp * inchannels + chan] +
+					buffer.AtPosition(samp - 1 * inchannels + chan) +
+					buffer.AtPosition(samp - 2 * inchannels + chan) +
+					buffer.AtPosition(samp - 3 * inchannels + chan)) / 4.f;
+		}
+	}
+	return FMOD_OK;
+}
 
 // DSP callback
-FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE *dsp_state, float *inbuffer, float *outbuffer, unsigned int length, int inchannels, int *outchannels)
+//FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int* outchannels)
+//{
+//	FMOD::DSP* thisdsp = (FMOD::DSP*)dsp_state->instance;
+//
+//	for (unsigned int samp = 0; samp < length; samp++)
+//	{
+//		for (int chan = 0; chan < *outchannels; chan++)
+//		{
+//			/*
+//			This DSP filter just halves the volume!
+//			Input is modified, and sent to output.
+//			*/
+//			outbuffer[(samp * *outchannels) + chan] = inbuffer[(samp * inchannels) + chan] * 0.2f;
+//		}
+//	}
+//
+//	return FMOD_OK;
+//}
+
+
+FMOD_RESULT F_CALLBACK myDSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
+	unsigned int length, int inchannels, int* outchannels)
 {
-	FMOD::DSP *thisdsp = (FMOD::DSP *)dsp_state->instance;
+	mydsp_data_t* data = (mydsp_data_t*)dsp_state->plugindata;
 
 	for (unsigned int samp = 0; samp < length; samp++)
 	{
 		for (int chan = 0; chan < *outchannels; chan++)
 		{
-			/*
-			This DSP filter just halves the volume!
-			Input is modified, and sent to output.
-			*/
-			outbuffer[(samp * *outchannels) + chan] = inbuffer[(samp * inchannels) + chan] * 0.2f;
+			data->buffer[(samp * *outchannels) + chan] =
+				inbuffer[(samp * inchannels) + chan] * data->volume_linear;
+			outbuffer[(samp * inchannels) + chan] = data->buffer[(samp * *outchannels) + chan];
 		}
 	}
-
 	return FMOD_OK;
 }
+
 
 CAudio::CAudio()
 {}
@@ -64,9 +129,9 @@ bool CAudio::Initialise()
 		memset(&dspdesc, 0, sizeof(dspdesc));
 
 		strncpy_s(dspdesc.name, "My first DSP unit", sizeof(dspdesc.name));
-		dspdesc.numinputbuffers = 1;
-		dspdesc.numoutputbuffers = 1;
-		dspdesc.read = DSPCallback;
+		dspdesc.numinputbuffers = 4;
+		dspdesc.numoutputbuffers = 4;
+		dspdesc.read = DSPCallbackAveragingFIR;
 
 		result = m_FmodSystem->createDSP(&dspdesc, &m_dsp);
 		FmodErrorCheck(result);
