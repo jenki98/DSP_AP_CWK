@@ -10,10 +10,17 @@ I've made these two functions non-member functions
 
 typedef struct
 {
-	float volume_linear;
-	float* buffer;
+	 float *buffer;
+    float volume_linear;
+    int   length_samples;
+    int   channels;
 } mydsp_data_t;
 
+//modify filter struct
+typedef struct
+{
+	float 
+};
 
 void FmodErrorCheck(FMOD_RESULT result)
 {
@@ -62,6 +69,19 @@ FMOD_RESULT F_CALLBACK DSPCallbackAveragingFIR(FMOD_DSP_STATE* dsp_state, float*
 	return FMOD_OK;
 }
 
+FMOD_RESULT F_CALLBACK myDSPSetParameterFloatCallback(FMOD_DSP_STATE* dsp_state, int index, float value)
+{
+	if (index == 1)
+	{
+		mydsp_data_t* mydata = (mydsp_data_t*)dsp_state->plugindata;
+
+		mydata->volume_linear = value;
+
+		return FMOD_OK;
+	}
+
+	return FMOD_ERR_INVALID_PARAM;
+}
 // DSP callback
 //FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int* outchannels)
 //{
