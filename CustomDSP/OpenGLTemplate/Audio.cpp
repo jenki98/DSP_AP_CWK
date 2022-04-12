@@ -11,16 +11,12 @@ I've made these two functions non-member functions
 typedef struct
 {
 	 float *buffer;
-    float volume_linear;
-    int   length_samples;
-    int   channels;
+	float volume_linear;
+	int   length_samples;
+	int   channels;
 } mydsp_data_t;
 
-//modify filter struct
-typedef struct
-{
-	float 
-};
+
 
 void FmodErrorCheck(FMOD_RESULT result)
 {
