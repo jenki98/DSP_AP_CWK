@@ -164,9 +164,9 @@ void Game::Initialise()
 
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
-	m_pAudio->LoadEventSound("Resources\\Audio\\Horse.wav");					// Royalty free sound from freesound.org
-	m_pAudio->LoadMusicStream("Resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
-	m_pAudio->PlayMusicStream();
+	m_pAudio->LoadEventSound("Resources\\Audio\\horn.mp3");					// Royalty free sound from freesound.org
+	m_pAudio->LoadMusicStream("Resources\\Audio\\Horse.wav");	// Royalty free music from http://www.nosoapradio.us/
+	//m_pAudio->PlayMusicStream();
 }
 
 // Render method runs repeatedly in a loop
@@ -283,11 +283,13 @@ void Game::Render()
 // Update method runs repeatedly with the Render method
 void Game::Update() 
 {
+	
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
 	MoveBall();
 	m_pAudio->Update(m_pCamera, m_ballpos);
-
+	m_pAudio->set_doppler(doppler);
+	m_pAudio->set_speed(m_speed);
 }
 
 
@@ -316,13 +318,13 @@ void Game::DisplayFrameRate()
 	// Now we want to subtract the current time by the last time that was stored
 	// to see if the time elapsed has been over a second, which means we found our FPS.
 	if (m_elapsedTime > 1000)
-    {
+	{
 		m_elapsedTime = 0;
 		m_framesPerSecond = m_frameCount;
 
 		// Reset the frames per second
 		m_frameCount = 0;
-    }
+	}
 
 	if (m_framesPerSecond > 0) {
 		// Use the font shader program and render the text
@@ -375,6 +377,14 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 120, 20, "DECREASE RADIUS: 8");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 140, 20, "DOPPLER: 9 %d", (int)doppler);
 	
 }
 
@@ -499,6 +509,9 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			if (m_radius > 0) {
 				m_radius -= 10.1f;
 			}
+			break;
+		case '9':
+			doppler += 1.0f;
 			break;
 		
 		case VK_F1:

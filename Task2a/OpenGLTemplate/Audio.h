@@ -19,6 +19,9 @@ public:
 	void ToggleMusicFilter();
 	void UpdateMusicPosition();
 	void Update(CCamera* cam , glm::vec3 ballpos);
+	void set_doppler(float doppler) { m_doppler = doppler; }
+	void set_speed(float speed) { m_speed = speed; }
+
 
 private:
 		
@@ -40,4 +43,6 @@ private:
 	float m_musicVolume = 0.2f;
 	FMOD_VECTOR m_ballpos;
 	FMOD_VECTOR camPos;
+	float m_doppler;
+	float m_speed;
 };
