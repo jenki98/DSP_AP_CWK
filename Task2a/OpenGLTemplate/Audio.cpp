@@ -22,6 +22,12 @@ bool CAudio::Initialise()
 	if (result != FMOD_OK) 
 		return false;
 
+
+	// Set 3D settings
+	result = m_FmodSystem->set3DSettings(5.0f, 1.0f, 1.0f);
+	FmodErrorCheck(result);
+	if (result != FMOD_OK)
+		return false;
 	return true;
 	
 }
@@ -40,10 +46,18 @@ bool CAudio::LoadEventSound(char *filename)
 // Play an event sound
 bool CAudio::PlayEventSound()
 {
-	result = m_FmodSystem->playSound(m_eventSound, NULL, false, NULL);
+	result = m_FmodSystem->playSound(m_eventSound, NULL, false, &m_eventChannel);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
+	// play through 3D channel
+	m_eventChannel->setMode(FMOD_3D);
+	//  set the position to be the balls's position
+	result = m_eventChannel->set3DAttributes(&m_ballpos,0,0);
+	FmodErrorCheck(result);
+	if (result != FMOD_OK)
+		return false;
+
 	return true;
 }
 
@@ -89,7 +103,10 @@ bool CAudio::PlayMusicStream()
 	// 3) Add input to the music head from the filter
 	result = m_musicDSPHead->addInput(m_musicFilter);
 	FmodErrorCheck(result);
-
+	// play through 3D channel
+	m_musicChannel->setMode(FMOD_3D);
+	//  set the position to be the balls's position
+	result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);
 	if (result != FMOD_OK)
 		return false;
 
@@ -99,14 +116,13 @@ bool CAudio::PlayMusicStream()
 
 	if (result != FMOD_OK)
 		return false;
-
 	// set the DSP object to be active
 	m_musicFilter->setActive(true);
 	// initially set the cutoff to a high value
 	m_musicFilter->setParameterFloat(FMOD_DSP_LOWPASS_CUTOFF, 22000);
 	// this state is used for toggling
 	m_musicFilterActive = false;
-
+	
 	return true;
 }
 
@@ -120,8 +136,15 @@ void CAudio::FmodErrorCheck(FMOD_RESULT result)
 	}
 }
 
-void CAudio::Update()
+void CAudio::Update(CCamera *camera, glm::vec3 ballpos)
 {
+	//update the ball pos 
+	ToFMODVector(ballpos, &m_ballpos);
+	//update the listener's position with the camera position
+	ToFMODVector(camera->GetPosition(), &camPos);
+	result = m_FmodSystem->set3DListenerAttributes(0, &m_ballpos, NULL, NULL, NULL);
+	FmodErrorCheck(result);
+	UpdateMusicPosition();
 	m_FmodSystem->update();
 }
 
@@ -139,4 +162,22 @@ void CAudio::ToggleMusicFilter()
 		// you could also use m_musicFilter->setBypass(true) instead...
 		m_musicFilter->setParameterFloat(FMOD_DSP_LOWPASS_CUTOFF, 22000);
 	}
+}
+	
+
+void CAudio::UpdateMusicPosition()
+{
+		// set the parameter to a low value
+		m_musicChannel->setMode(FMOD_3D);
+		//  set the position to be the balls's position
+		result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);	
+	
+}
+
+
+void CAudio::ToFMODVector(glm::vec3& glVec3, FMOD_VECTOR* fmodVec)
+{
+	fmodVec->x = glVec3.x;
+	fmodVec->y = glVec3.y;
+	fmodVec->z = glVec3.z;
 }

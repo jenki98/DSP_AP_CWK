@@ -263,8 +263,8 @@ void Game::Render()
 
 	// Render the sphere
 	modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(glm::vec3(0.0f, 2.0f, 150.0f));
-		modelViewMatrixStack.Scale(2.0f);
+		modelViewMatrixStack.Translate(m_ballpos);
+		modelViewMatrixStack.Scale(20.0f);
 		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
 		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 		// To turn off texture mapping and use the sphere colour only (currently white material), uncomment the next line
@@ -285,12 +285,21 @@ void Game::Update()
 {
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
+	MoveBall();
+	m_pAudio->Update(m_pCamera, m_ballpos);
 
-	m_pAudio->Update();
 }
 
 
+void Game::MoveBall() {
+	/*m_angle += 0.05f *m_speed;
+	m_ballpos.x = m_ballpos.x + cos(m_angle) * 5.5f * m_speed;
+	m_ballpos.z = m_ballpos.z + sin(m_angle) * 5.5f * m_speed;*/
 
+	m_angle += 0.05f;
+	m_ballpos.x = m_radius * cos(m_angle * m_speed);
+	m_ballpos.z = m_radius * sin(m_angle * m_speed);
+}
 void Game::DisplayFrameRate()
 {
 
@@ -324,6 +333,49 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 20, 20, "FPS: %d", m_framesPerSecond);
 	}
+
+
+	
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 40, 20, "SPEED: %d", (int)m_speed);
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 60, 20, "INCREASE SPEED: 5");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 80, 20, "DECREASE SPEED: 6");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height -100, 20, "INCREASE RADIUS: 7");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 120, 20, "DECREASE RADIUS: 8");
+	
 }
 
 // The game loop runs repeatedly until game over
@@ -431,6 +483,24 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 		case '2':
 			m_pAudio->ToggleMusicFilter();
 			break;
+
+		case '5':
+			m_speed += 0.1f;
+			break;
+		case '6':
+			if (m_speed > 0) {
+				m_speed -= 0.1f;
+			}
+			break;
+		case '7':
+			m_radius += 10.f;
+			break;
+		case '8':
+			if (m_radius > 0) {
+				m_radius -= 10.1f;
+			}
+			break;
+		
 		case VK_F1:
 			m_pAudio->PlayEventSound();
 			break;

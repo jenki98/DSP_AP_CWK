@@ -54,10 +54,14 @@ private:
 	static const int FPS = 60;
 	void DisplayFrameRate();
 	void GameLoop();
+	void MoveBall();
 	GameWindow m_gameWindow;
 	HINSTANCE m_hInstance;
 	int m_frameCount;
 	double m_elapsedTime;
-
-
+	glm::vec3 m_ballpos = glm::vec3(100,5,0);
+	float m_angle = 0.0f;
+	float m_timer = 0;
+	float m_speed = 0.01;
+	float m_radius = 50.0f;
 };
