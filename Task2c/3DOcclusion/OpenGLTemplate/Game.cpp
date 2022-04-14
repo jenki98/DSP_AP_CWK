@@ -34,6 +34,7 @@ Source code drawn from a number of sources and examples, including contributions
 #include "MatrixStack.h"
 #include "OpenAssetImportMesh.h"
 #include "Audio.h"
+#include "Wall.h"
 
 // Constructor
 Game::Game()
@@ -48,7 +49,7 @@ Game::Game()
 	m_pSphere = NULL;
 	m_pHighResolutionTimer = NULL;
 	m_pAudio = NULL;
-
+	m_pWall = NULL;
 	m_dt = 0.0;
 	m_framesPerSecond = 0;
 	m_frameCount = 0;
@@ -67,7 +68,7 @@ Game::~Game()
 	delete m_pHorseMesh;
 	delete m_pSphere;
 	delete m_pAudio;
-
+	delete m_pWall;
 	if (m_pShaderPrograms != NULL) {
 		for (unsigned int i = 0; i < m_pShaderPrograms->size(); i++)
 			delete (*m_pShaderPrograms)[i];
@@ -95,6 +96,7 @@ void Game::Initialise()
 	m_pHorseMesh = new COpenAssetImportMesh;
 	m_pSphere = new CSphere;
 	m_pAudio = new CAudio;
+	m_pWall = new CWall;
 
 	RECT dimensions = m_gameWindow.GetDimensions();
 
@@ -160,8 +162,8 @@ void Game::Initialise()
 
 	// Create a sphere
 	m_pSphere->Create("resources\\textures\\", "dirtpile01.jpg", 25, 25);  // Texture downloaded from http://www.psionicgames.com/?page_id=26 on 24 Jan 2013
+	m_pWall->Create("resources\\textures\\", "dirtpile01.jpg", 25);  
 	glEnable(GL_CULL_FACE);
-
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
 	m_pAudio->LoadEventSound("Resources\\Audio\\Horse.wav");					// Royalty free sound from freesound.org
@@ -272,6 +274,16 @@ void Game::Render()
 		m_pSphere->Render();
 	modelViewMatrixStack.Pop();
 		
+
+	modelViewMatrixStack.Push();
+	modelViewMatrixStack.Translate(glm::vec3(50, 0, 50));
+	modelViewMatrixStack.Scale(2.0f);
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	// To turn off texture mapping and use the prism colour only (currently white material), uncomment the next line
+	//pMainProgram->SetUniform("bUseTexture", false);
+	m_pWall->Render();
+	modelViewMatrixStack.Pop();
 	// Draw the 2D graphics after the 3D graphics
 	DisplayFrameRate();
 
@@ -323,6 +335,31 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 20, 20, "FPS: %d", m_framesPerSecond);
+
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 40, 20, "CAMX: %d", (int)m_pCamera->GetPosition().x);
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 60, 20, "CAMY: %d", (int)m_pCamera->GetPosition().y);
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 80, 20, "CAMZ: %d", (int)m_pCamera->GetPosition().z);
 	}
 }
 

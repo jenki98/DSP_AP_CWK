@@ -21,6 +21,8 @@ public:
 	void IncreaseMusicVolume();
 	void DecreaseMusicVolume();
 	void Update(CCamera *cam);
+	void SetupGeometry();
+
 
 private:
 		
@@ -34,7 +36,7 @@ private:
 
 	FMOD::Sound *m_eventSound;
 	FMOD::Channel *m_eventChannel;
-	
+	FMOD::Geometry* object_geometry = 0;
 	FMOD::Sound *m_music;
 	FMOD::DSP *m_musicFilter;
 	bool m_musicFilterActive;

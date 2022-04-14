@@ -16,6 +16,7 @@ class CHighResolutionTimer;
 class CSphere;
 class COpenAssetImportMesh;
 class CAudio;
+class CWall;
 
 class Game {
 private:
@@ -35,7 +36,7 @@ private:
 	CSphere *m_pSphere;
 	CHighResolutionTimer *m_pHighResolutionTimer;
 	CAudio *m_pAudio;
-
+	CWall* m_pWall;
 	// Some other member variables
 	double m_dt;
 	int m_framesPerSecond;

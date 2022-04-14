@@ -17,18 +17,53 @@ bool CAudio::Initialise()
 		return false;
 
 	// Initialise the system
-	result = m_FmodSystem->init(32, FMOD_INIT_3D_RIGHTHANDED, 0);
+	result = m_FmodSystem->init(100, FMOD_INIT_NORMAL | FMOD_INIT_CHANNEL_LOWPASS | FMOD_INIT_3D_RIGHTHANDED, 0);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK) 
 		return false;
 
 	// Set 3D settings
-	result = m_FmodSystem->set3DSettings(1.0f, 1.0f, 1.0f);
+	result = m_FmodSystem->set3DSettings(1.f, 1.f, 0.1f);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
+	// Set Occlusion settings
+	result = m_FmodSystem->setGeometrySettings(1000); //resize world to occlusion
+	if (result != FMOD_OK)
+		return false;
 
+	SetupGeometry();
 	return true;
+}
+
+void CAudio::SetupGeometry() {
+	//position a object(for now)
+	FMOD_VECTOR position_object = { 50, 0, 50 }; //position objectgeometry
+	FMOD_VECTOR forward_object = { 0, 0, -1 }; // rotation object geometry
+	FMOD_VECTOR up_object = { 0, 1, 0 };
+
+	//position vertices 4 to rectangle
+
+	FMOD_VECTOR cube[8] = {
+	{ -50, -50, 0},
+	{ -50, 50, 0},
+	{ 50, 50, 0}, 
+	{ 50, -50, 0},
+	{ -50, -50, -100},
+	{ -50, 50, -100},
+	{ 50, 50, -100},
+	{ 50, -50, -100},
+	//rectangle beetwen sound at listener
+	};
+
+
+	result = m_FmodSystem->createGeometry(1, 8, &object_geometry); //create geometry to occlusion
+
+	object_geometry->setPosition(&position_object); //using to position object geometry
+	object_geometry->setRotation(&forward_object, &up_object); //using to rotation object geometry
+
+	int index = 0; //index to occlusion 
+	result = object_geometry->addPolygon(0.9, 1, true, 4, cube, &index); // add polygon to object geometry 
 	
 }
 
@@ -52,8 +87,13 @@ bool CAudio::PlayEventSound()
 		return false;
 	// play through 3D channel
 	m_eventChannel->setMode(FMOD_3D);
+
 	// set the position to be the horse's position
-	result = m_eventChannel->set3DAttributes(0, 0, 0);
+	FMOD_VECTOR pos_sound = { 0, 0, 0 };
+	FMOD_VECTOR vel_sound = { 0, 0, 0 };
+	result = m_eventChannel->set3DAttributes(&pos_sound, &vel_sound);
+	//sound position
+	
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
@@ -142,9 +182,15 @@ void CAudio::FmodErrorCheck(FMOD_RESULT result)
 
 void CAudio::Update(CCamera *camera)
 {
+
+	FMOD_VECTOR vel_listener = { 0, 0, 0 };
+	FMOD_VECTOR forward_listener = { 0, 0, -1 };
+	FMOD_VECTOR up_listener = { 0, 1, 0 };
+
 	// 5) update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
-	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
+	//result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
+	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, &vel_listener, &forward_listener, &up_listener);
 	FmodErrorCheck(result);
 	m_FmodSystem->update();
 }

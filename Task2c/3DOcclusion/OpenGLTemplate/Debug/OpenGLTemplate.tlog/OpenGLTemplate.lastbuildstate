@@ -1,2 +1,2 @@
-#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
-Debug|Win32|D:\Dev\DSP\3DOcclusion\|
+PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:VCServicingVersionATL=14.29.30136:VCServicingVersionCrtHeaders=14.29.30136:TargetPlatformVersion=10.0.19041.0:
+Debug|Win32|D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Task2c\3DOcclusion\|

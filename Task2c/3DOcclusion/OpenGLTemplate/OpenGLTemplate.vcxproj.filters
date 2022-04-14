@@ -49,6 +49,9 @@
     <ClCompile Include="Cubemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Source Files\BasicShapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="Cubemap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Header Files\BasicShapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
