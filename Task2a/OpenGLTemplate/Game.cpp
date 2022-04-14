@@ -164,9 +164,9 @@ void Game::Initialise()
 
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
-	m_pAudio->LoadEventSound("Resources\\Audio\\Horse.wav");					// Royalty free sound from freesound.org
+	m_pAudio->LoadEventSound("Resources\\Audio\\DST-Garote.mp3");					// Royalty free sound from freesound.org
 	m_pAudio->LoadMusicStream("Resources\\Audio\\DST-Garote.mp3");	// Royalty free music from http://www.nosoapradio.us/
-	m_pAudio->PlayMusicStream();
+	//m_pAudio->PlayMusicStream();
 }
 
 // Render method runs repeatedly in a loop
