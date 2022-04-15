@@ -14,6 +14,7 @@ public:
 	void Release();
 	glm::vec3 position;
 	glm::vec3 up;
+	glm::vec3 WallVertices[24];
 private:
 	UINT m_vao;
 	CVertexBufferObject m_vbo;
@@ -21,5 +22,5 @@ private:
 	string m_directory;
 	string m_filename;
 	int m_numTriangles;
-
+	
 };

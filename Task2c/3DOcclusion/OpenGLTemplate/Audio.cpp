@@ -44,7 +44,6 @@ void CAudio::SetupGeometry(glm::vec3 pos, glm::vec3 forward, glm::vec3 up, glm::
 
 	FMOD_VECTOR wall[8];
 	for (unsigned int i = 0; i < 8; i++) {
-
 		ToFMODVector(vertices[i], &wall[i]);
 	}
 	
