@@ -4,7 +4,7 @@
 #include "./include/fmod_studio/fmod_errors.h"
 #include "./include/glm/gtc/type_ptr.hpp"
 #include "Camera.h"
-
+#include <vector>
 
 
 class CAudio
@@ -21,7 +21,7 @@ public:
 	void IncreaseMusicVolume();
 	void DecreaseMusicVolume();
 	void Update(CCamera *cam);
-	void SetupGeometry();
+	void SetupGeometry(glm::vec3 pos, glm::vec3 forward, glm::vec3 up, glm::vec3 vertices[]);
 
 
 private:
@@ -46,7 +46,10 @@ private:
 	float m_musicVolume = 0.2f;
 
 	FMOD_VECTOR camPos;
+	FMOD_VECTOR objectPos;
+	FMOD_VECTOR objectForward;
+	FMOD_VECTOR objectUp;
 	FMOD_VECTOR eventPos;
 	FMOD_VECTOR eventVel;
-
+	
 };

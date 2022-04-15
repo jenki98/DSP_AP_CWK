@@ -32,39 +32,29 @@ bool CAudio::Initialise()
 	if (result != FMOD_OK)
 		return false;
 
-	SetupGeometry();
+
 	return true;
 }
 
-void CAudio::SetupGeometry() {
+void CAudio::SetupGeometry(glm::vec3 pos, glm::vec3 forward, glm::vec3 up, glm::vec3 vertices[]) {
 	//position a object(for now)
-	FMOD_VECTOR position_object = { 50, 0, 50 }; //position objectgeometry
-	FMOD_VECTOR forward_object = { 0, 0, -1 }; // rotation object geometry
-	FMOD_VECTOR up_object = { 0, 1, 0 };
+	ToFMODVector(pos, &objectPos); //position objectgeometry
+	ToFMODVector(forward, &objectForward); 
+	ToFMODVector(up, &objectUp);
 
-	//position vertices 4 to rectangle
+	FMOD_VECTOR wall[8];
+	for (unsigned int i = 0; i < 8; i++) {
 
-	FMOD_VECTOR cube[8] = {
-	{ -50, -50, 0},
-	{ -50, 50, 0},
-	{ 50, 50, 0}, 
-	{ 50, -50, 0},
-	{ -50, -50, -100},
-	{ -50, 50, -100},
-	{ 50, 50, -100},
-	{ 50, -50, -100},
-	//rectangle beetwen sound at listener
-	};
-
-
+		ToFMODVector(vertices[i], &wall[i]);
+	}
+	
 	result = m_FmodSystem->createGeometry(1, 8, &object_geometry); //create geometry to occlusion
-
-	object_geometry->setPosition(&position_object); //using to position object geometry
-	object_geometry->setRotation(&forward_object, &up_object); //using to rotation object geometry
+	object_geometry->setPosition(&objectPos); //using to position object geometry
+	object_geometry->setRotation(&objectForward, & objectUp); //using to rotation object geometry
 
 	int index = 0; //index to occlusion 
-	result = object_geometry->addPolygon(0.9, 1, true, 4, cube, &index); // add polygon to object geometry 
-	
+	result = object_geometry->addPolygon(0.9, 1, true, 8, wall, &index); // add polygon to object geometry 
+
 }
 
 // Load an event sound

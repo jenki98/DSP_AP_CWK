@@ -35,69 +35,46 @@ void CWall::Create(string directory, string filename, float textureRepeat)
 	m_vbo.Bind();
 
 	// Vertex positions
-	glm::vec3 WallVertices[20] =
+	glm::vec3 WallVertices[24] =
 	{
-		//origin centre bottom 
-		//front of cube
-		glm::vec3(-2.0f, 0.0f, 5.0f),
-		glm::vec3(-2.0f, 10.0f, 5.0f),
-		glm::vec3(-2.0f, 0.0f, -5.0f),
-		glm::vec3(-2.0f, 10.0f, -5.0f),
-		//left of cube
-		glm::vec3(-2.0f, 0.0f, -5.0f),
-		glm::vec3(-2.0f, 10.0f, -5.0f),
-		glm::vec3(2.0f, 0.0f, -5.0f),
-		glm::vec3(2.0f, 10.0f, -5.0f),
-		//back of cube
-		glm::vec3(2.0f, 0.0f, -5.0f),
-		glm::vec3(2.0f, 10.0f, -5.0f),
-		glm::vec3(2.0f, 0.0f, 5.0f),
-		glm::vec3(2.0f, 10.0f, 5.0f),
-		//right of cube
-		glm::vec3(2.0f, 0.0f, 5.0f),
-		glm::vec3(2.0f, 10.0f, 5.0f),
-		glm::vec3(-2.0f, 0.0f, 5.0f),
-		glm::vec3(-2.0f, 10.0f, 5.0f),
-		//bottom of cube
-		glm::vec3(-2.0f, 0.0f, 5.0f),
-		glm::vec3(-2.0f, 0.0f, -5.0f),
-		glm::vec3(2.0f, 0.0f, 5.0f),
-		glm::vec3(2.0f, 0.0f, -5.0f),
 
+		//front of cube
+		glm::vec3(-50.0f, -50.0f, 20.0f),
+		glm::vec3(-50.0f, 50.0f, 20.0f),
+		glm::vec3(-50.0f, -50.0f, 0.0f),
+		glm::vec3(-50.0f, 50.0f, 0.0f),
+		//left of cube
+		glm::vec3(-50.0f, -50.0f, 0.0f),
+		glm::vec3(-50.0f, 50.0f, 0.0f),
+		glm::vec3(50.0f, -50.0f, 0.0f),
+		glm::vec3(50.0f, 50.0f, 0.0f),
+		//back of cube
+		glm::vec3(50.0f, -50.0f, 0.0f),
+		glm::vec3(50.0f, 50.0f, 0.0f),
+		glm::vec3(50.0f, -50.0f, 20.0f),
+		glm::vec3(50.0f, 50.0f, 20.0f),
+		//right of cube
+		glm::vec3(50.0f, -50.0f, 20.0f),
+		glm::vec3(50.0f, 50.0f, 20.0f),
+		glm::vec3(-50.0f, -50.0f, 20.0f),
+		glm::vec3(-50.0f, 50.0f, 20.0f),
+		//bottom of cube
+		glm::vec3(-50.0f, -50.0f, 20.0f),
+		glm::vec3(-50.0f, -50.0f, 0.0f),
+		glm::vec3(50.0f, -50.0f, 20.0f),
+		glm::vec3(50.0f, -50.0f, 0.0f),
+		//top of cube
+		glm::vec3(50.0f,  50.0f, 20.0f),
+		glm::vec3(50.0f,  50.0f, 0.0f),
+		glm::vec3(-50.0f, 50.0f, 20.0f),
+		glm::vec3(-50.0f, 50.0f, 0.0f),
+		
 
 	};
 
-	// Wall normal
-	glm::vec3 WallColours[20] = {
-		//front of cube
-		glm::vec3(1.0f, 0.0f, 1.0f),
-		glm::vec3(1.0f, 0.0f, 1.0f),
-		glm::vec3(1.0f, 0.0f, 1.0f),
-		glm::vec3(1.0f, 0.0f, 1.0f),
-		//left of cube
-		glm::vec3(1.0f, 0.0f, 0.0f),
-		glm::vec3(1.0f, 0.0f, 0.0f),
-		glm::vec3(1.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 0.0f, 0.0f),
-		//back of cube
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		//right of cube
-		glm::vec3(1.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 0.0f, 0.0f),
-		//bottom of cube
-		glm::vec3(0.0f, 1.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f),
-	};
-
+	
 	// Texture coordinates
-	glm::vec2 WallTexCoords[20] =
+	glm::vec2 WallTexCoords[24] =
 	{
 		//good
 		//front of cube
@@ -125,10 +102,15 @@ void CWall::Create(string directory, string filename, float textureRepeat)
 		glm::vec2(0.0f, 0.0f),
 		glm::vec2(1.0f, 1.0f),
 		glm::vec2(1.0f, 0.0f),
+		//top of cube
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(0.0f, 0.0f),
+		glm::vec2(1.0f, 1.0f),
+		glm::vec2(1.0f, 0.0f),
 	};
 
 	// Wall normal
-	glm::vec3 WallNormals[32] = {
+	glm::vec3 WallNormals[24] = {
 
 		//front of cube
 		glm::vec3(0.0f, 0.0f, 1.0f),
@@ -155,14 +137,18 @@ void CWall::Create(string directory, string filename, float textureRepeat)
 		glm::vec3(0.0f, -1.0f, 0.0f),
 		glm::vec3(0.0f, -1.0f, 0.0f),
 		glm::vec3(0.0f, -1.0f, 0.0f),
+		//top of cube
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
 	};
 
 
 
 	// Put the vertex attributes in the VBO
-	for (unsigned int i = 0; i < 20; i++) {
+	for (unsigned int i = 0; i < 24; i++) {
 		m_vbo.AddData(&WallVertices[i], sizeof(glm::vec3));
-		//m_vbo.AddData(&WallColours[i], sizeof(glm::vec3));
 		m_vbo.AddData(&WallTexCoords[i], sizeof(glm::vec2));
 		m_vbo.AddData(&WallNormals[i], sizeof(glm::vec3));
 	}
@@ -171,25 +157,7 @@ void CWall::Create(string directory, string filename, float textureRepeat)
 	// Upload the VBO to the GPU
 	m_vbo.UploadDataToGPU(GL_STATIC_DRAW);
 
-	// Set the vertex attribute locations
-	//GLsizei istride = 3 * sizeof(glm::vec3) + sizeof(glm::vec2);
-
-
-	//// Vertex positions
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, istride, 0);
-	//// Colours 
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, istride, (void*)(sizeof(glm::vec3)));
-	//// Texture coordinates
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, istride, (void*)(sizeof(glm::vec3) + sizeof(glm::vec3)));
-	//// Normal vectors
-	//glEnableVertexAttribArray(3);
-	//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, istride, (void*)(sizeof(glm::vec3) + sizeof(glm::vec3) + sizeof(glm::vec2)));
-
-
-	//for use without colour attribute
+	
 	GLsizei istride = 2 * sizeof(glm::vec3) + sizeof(glm::vec2);
 	// Vertex positions
 	glEnableVertexAttribArray(0);
@@ -212,7 +180,7 @@ void CWall::Render()
 	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
 	glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
 	glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
-
+	glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
 
 
 }

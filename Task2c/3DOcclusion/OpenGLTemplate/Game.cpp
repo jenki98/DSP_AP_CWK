@@ -274,16 +274,30 @@ void Game::Render()
 		m_pSphere->Render();
 	modelViewMatrixStack.Pop();
 		
+	//render the wall
+	glm::vec3 WallPos = glm::vec3(50, 0, 0);
+	glm::vec3 WallForward = glm::vec3(-1, 0, 0);
+	glm::vec3 WallUp = glm::vec3(0, 1, 0);
 
+	glm::vec3 Vertices[8] = {
+		glm::vec3( -50, -50, 0),glm::vec3( -50, 50, 0),glm::vec3( 50, 50, 0),glm::vec3( 50, -50, 0),
+		glm::vec3( -50, -50, 20),glm::vec3( -50, 50, 20),glm::vec3( 50, 50, 20),glm::vec3( 50, -50, 20)
+	};
 	modelViewMatrixStack.Push();
-	modelViewMatrixStack.Translate(glm::vec3(50, 0, 50));
-	modelViewMatrixStack.Scale(2.0f);
+	modelViewMatrixStack.Translate(WallPos);
+	modelViewMatrixStack.Scale(1.0f);
+	modelViewMatrixStack.Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90.0f);
 	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
 	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 	// To turn off texture mapping and use the prism colour only (currently white material), uncomment the next line
-	//pMainProgram->SetUniform("bUseTexture", false);
+	//pMainProgram->SetUniform("bUseTexture", false
+	m_pAudio->SetupGeometry(WallPos, WallForward, WallUp, Vertices);
 	m_pWall->Render();
 	modelViewMatrixStack.Pop();
+	//initalise occlusion geometry
+	
+
+
 	// Draw the 2D graphics after the 3D graphics
 	DisplayFrameRate();
 
