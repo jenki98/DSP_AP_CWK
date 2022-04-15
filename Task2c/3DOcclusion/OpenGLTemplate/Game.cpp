@@ -345,7 +345,7 @@ void Game::DisplayFrameRate()
 
 	RECT dimensions = m_gameWindow.GetDimensions();
 	int height = dimensions.bottom - dimensions.top;
-
+	
 	// Increase the elapsed time and frame counter
 	m_elapsedTime += m_dt;
 	m_frameCount++;
@@ -394,6 +394,24 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 80, 20, "CAMZ: %d", (int)m_pCamera->GetPosition().z);
+
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 100, 20, "To Test The Occlusion Effect");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 120, 20, "Move Behind A Wall and Press 1");
+
 	}
 }
 

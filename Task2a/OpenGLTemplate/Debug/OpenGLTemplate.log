@@ -1,3 +1,19 @@
-﻿  Game.cpp
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Task2a\OpenGLTemplate\game.h(65,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-  OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Task2a\Debug\OpenGLTemplate.exe
+﻿  Audio.cpp
+  Camera.cpp
+  Cubemap.cpp
+  FreeTypeFont.cpp
+  Game.cpp
+D:\callu\Documents\Master Repos\Audio\groupwork2\Task2a\OpenGLTemplate\game.h(65,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+  GameWindow.cpp
+  HighResolutionTimer.cpp
+  MatrixStack.cpp
+  OpenAssetImportMesh.cpp
+  Plane.cpp
+  Shaders.cpp
+  Skybox.cpp
+  Sphere.cpp
+  Texture.cpp
+  VertexBufferObject.cpp
+  VertexBufferObjectIndexed.cpp
+  Generating Code...
+  OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork2\Task2a\Debug\OpenGLTemplate.exe
