@@ -56,7 +56,7 @@ bool CAudio::PlayEventSound()
 	// play through 3D channel
 	m_eventChannel->setMode(FMOD_3D);
 	//  set the position to be the balls's position
-	result = m_eventChannel->set3DAttributes(&m_ballpos,0,0);
+	result = m_eventChannel->set3DAttributes(&m_ballpos, &posVel,0);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
@@ -179,7 +179,7 @@ void CAudio::UpdateMusicPosition()
 		// set the parameter to a low value
 		m_musicChannel->setMode(FMOD_3D);
 		//  set the position to be the balls's position
-		result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);	
+		result = m_musicChannel->set3DAttributes(&m_ballpos, &posVel, 0);	
 	
 }
 
