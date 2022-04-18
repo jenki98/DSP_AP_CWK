@@ -24,7 +24,7 @@ bool CAudio::Initialise()
 
 
 	// Set 3D settings
-	result = m_FmodSystem->set3DSettings(1.f, 1.f, 1.0f);
+	result = m_FmodSystem->set3DSettings(5.0f, 1.0f, 1.0f);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
@@ -35,7 +35,7 @@ bool CAudio::Initialise()
 // Load an event sound
 bool CAudio::LoadEventSound(char *filename)
 {
-	result = m_FmodSystem->createSound(filename, FMOD_LOOP_OFF , 0, &m_eventSound);
+	result = m_FmodSystem->createSound(filename, FMOD_LOOP_OFF, 0, &m_eventSound);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK) 
 		return false;
@@ -46,9 +46,6 @@ bool CAudio::LoadEventSound(char *filename)
 // Play an event sound
 bool CAudio::PlayEventSound()
 {
-	
-	m_doppler = m_speed / 343;
-	result = m_FmodSystem->set3DSettings(4.f, 1.f, 1.0f);
 	result = m_FmodSystem->playSound(m_eventSound, NULL, false, &m_eventChannel);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
@@ -56,7 +53,7 @@ bool CAudio::PlayEventSound()
 	// play through 3D channel
 	m_eventChannel->setMode(FMOD_3D);
 	//  set the position to be the balls's position
-	result = m_eventChannel->set3DAttributes(&m_ballpos, &posVel,0);
+	result = m_eventChannel->set3DAttributes(&m_ballpos,0,0);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
@@ -68,8 +65,7 @@ bool CAudio::PlayEventSound()
 // Load a music stream
 bool CAudio::LoadMusicStream(char *filename)
 {
-
-	result = m_FmodSystem->createStream(filename, FMOD_LOOP_NORMAL, 0, &m_music);
+	result = m_FmodSystem->createStream(filename, NULL | FMOD_LOOP_NORMAL, 0, &m_music);
 	FmodErrorCheck(result);
 
 	if (result != FMOD_OK)
@@ -92,9 +88,6 @@ bool CAudio::LoadMusicStream(char *filename)
 // Play a music stream
 bool CAudio::PlayMusicStream()
 {
-
-	result = m_FmodSystem->set3DSettings(1.f, 1.f, 1.0f);
-	//m_FmodSystem->doppl
 	result = m_FmodSystem->playSound(m_music, NULL, false, &m_musicChannel);
 	FmodErrorCheck(result);
 
@@ -113,7 +106,7 @@ bool CAudio::PlayMusicStream()
 	// play through 3D channel
 	m_musicChannel->setMode(FMOD_3D);
 	//  set the position to be the balls's position
-	result = m_musicChannel->set3DAttributes(&m_ballpos, &posVel, 0);
+	result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);
 	if (result != FMOD_OK)
 		return false;
 
@@ -147,11 +140,9 @@ void CAudio::Update(CCamera *camera, glm::vec3 ballpos)
 {
 	//update the ball pos 
 	ToFMODVector(ballpos, &m_ballpos);
-	ToFMODVector(vel, &posVel);
 	//update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
-	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
-	result = m_eventChannel->set3DAttributes(&m_ballpos, &posVel, 0);
+	result = m_FmodSystem->set3DListenerAttributes(0, &m_ballpos, NULL, NULL, NULL);
 	FmodErrorCheck(result);
 	UpdateMusicPosition();
 	m_FmodSystem->update();
@@ -179,7 +170,7 @@ void CAudio::UpdateMusicPosition()
 		// set the parameter to a low value
 		m_musicChannel->setMode(FMOD_3D);
 		//  set the position to be the balls's position
-		result = m_musicChannel->set3DAttributes(&m_ballpos, &posVel, 0);	
+		result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);	
 	
 }
 

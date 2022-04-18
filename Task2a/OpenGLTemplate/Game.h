@@ -64,5 +64,4 @@ private:
 	float m_timer = 0;
 	float m_speed = 0.01;
 	float m_radius = 50.0f;
-	float doppler = 0.0f;
 };
