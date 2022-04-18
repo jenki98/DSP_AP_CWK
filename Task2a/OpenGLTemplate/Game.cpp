@@ -164,9 +164,12 @@ void Game::Initialise()
 
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
-	m_pAudio->LoadEventSound("Resources\\Audio\\DST-Garote.mp3");					// Royalty free sound from freesound.org
+	//m_pAudio->LoadEventSound("Resources\\Audio\\DST-Garote.mp3");					// Royalty free sound from freesound.org
+	m_pAudio->LoadEventSound("Resources\\Audio\\horn.mp3");
 	m_pAudio->LoadMusicStream("Resources\\Audio\\Horse.wav");	// Royalty free music from http://www.nosoapradio.us/
 	//m_pAudio->PlayMusicStream();
+	m_pCamera->Set(glm::vec3(-2, 15, 0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0));
+	m_pAudio->PlayEventSound();
 }
 
 // Render method runs repeatedly in a loop
@@ -286,6 +289,7 @@ void Game::Update()
 	
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
+
 	MoveBall();
 	m_pAudio->Update(m_pCamera, m_ballpos, m_ballVelocity);
 	m_pAudio->set_doppler(doppler);
@@ -301,7 +305,7 @@ void Game::MoveBall() {
 	m_angle += 0.05f;
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);
 	m_ballpos.z = m_radius * sin(m_angle * m_speed);
-
+	glm::vec3 i = m_pCamera->GetPosition();
 	m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);
 }
 void Game::DisplayFrameRate()
@@ -380,13 +384,7 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 120, 20, "DECREASE RADIUS: 8");
 
-		// Use the font shader program and render the text
-		fontProgram->UseProgram();
-		glDisable(GL_DEPTH_TEST);
-		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
-		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
-		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 140, 20, "DOPPLER: 9 %d", (int)doppler);
+		
 	
 }
 

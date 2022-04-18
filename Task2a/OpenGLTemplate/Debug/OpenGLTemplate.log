@@ -1,2 +1,3 @@
-﻿  Audio.cpp
-  OpenGLTemplate.vcxproj -> C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Task2a\Debug\OpenGLTemplate.exe
+﻿  Game.cpp
+D:\callu\Documents\Master Repos\Audio\groupwork3\Task2a\OpenGLTemplate\game.h(65,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+  OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork3\Task2a\Debug\OpenGLTemplate.exe

@@ -22,12 +22,6 @@ bool CAudio::Initialise()
 	if (result != FMOD_OK) 
 		return false;
 
-
-	// Set 3D settings
-	result = m_FmodSystem->set3DSettings(1.f, 1.f, 1.0f);
-	FmodErrorCheck(result);
-	if (result != FMOD_OK)
-		return false;
 	return true;
 	
 }
@@ -47,8 +41,7 @@ bool CAudio::LoadEventSound(char *filename)
 bool CAudio::PlayEventSound()
 {
 	
-	m_doppler = m_speed / 343;
-	result = m_FmodSystem->set3DSettings(4.f, 1.f, 1.0f);
+
 	result = m_FmodSystem->playSound(m_eventSound, NULL, false, &m_eventChannel);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
@@ -57,6 +50,7 @@ bool CAudio::PlayEventSound()
 	m_eventChannel->setMode(FMOD_3D);
 	//  set the position to be the balls's position
 	result = m_eventChannel->set3DAttributes(&m_ballpos,0,0);
+	result = m_FmodSystem->set3DSettings(4.f, 1.f, 1.0f);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
@@ -152,8 +146,8 @@ void CAudio::Update(CCamera *camera, glm::vec3 ballpos, glm::vec3 velocity)
 	ToFMODVector(camera->GetPosition(), &camPos);
 	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
 	result = m_eventChannel->set3DAttributes(&m_ballpos, &posVel, 0);
+
 	FmodErrorCheck(result);
-	UpdateMusicPosition();
 	m_FmodSystem->update();
 }
 
@@ -174,14 +168,7 @@ void CAudio::ToggleMusicFilter()
 }
 	
 
-void CAudio::UpdateMusicPosition()
-{
-		// set the parameter to a low value
-		m_musicChannel->setMode(FMOD_3D);
-		//  set the position to be the balls's position
-		result = m_musicChannel->set3DAttributes(&m_ballpos, 0, 0);	
-	
-}
+
 
 
 void CAudio::ToFMODVector(glm::vec3& glVec3, FMOD_VECTOR* fmodVec)
