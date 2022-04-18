@@ -65,4 +65,5 @@ private:
 	float m_speed = 0.01;
 	float m_radius = 50.0f;
 	float doppler = 0.0f;
+	glm::vec3 m_ballVelocity;
 };

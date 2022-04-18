@@ -164,7 +164,7 @@ void Game::Initialise()
 
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
-	m_pAudio->LoadEventSound("Resources\\Audio\\horn.mp3");					// Royalty free sound from freesound.org
+	m_pAudio->LoadEventSound("Resources\\Audio\\DST-Garote.mp3");					// Royalty free sound from freesound.org
 	m_pAudio->LoadMusicStream("Resources\\Audio\\Horse.wav");	// Royalty free music from http://www.nosoapradio.us/
 	//m_pAudio->PlayMusicStream();
 }
@@ -287,7 +287,7 @@ void Game::Update()
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
 	MoveBall();
-	m_pAudio->Update(m_pCamera, m_ballpos);
+	m_pAudio->Update(m_pCamera, m_ballpos, m_ballVelocity);
 	m_pAudio->set_doppler(doppler);
 	m_pAudio->set_speed(m_speed);
 }
@@ -301,6 +301,8 @@ void Game::MoveBall() {
 	m_angle += 0.05f;
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);
 	m_ballpos.z = m_radius * sin(m_angle * m_speed);
+
+	m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);
 }
 void Game::DisplayFrameRate()
 {

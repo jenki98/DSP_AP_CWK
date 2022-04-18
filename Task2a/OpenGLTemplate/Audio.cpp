@@ -35,7 +35,7 @@ bool CAudio::Initialise()
 // Load an event sound
 bool CAudio::LoadEventSound(char *filename)
 {
-	result = m_FmodSystem->createSound(filename, FMOD_LOOP_OFF , 0, &m_eventSound);
+	result = m_FmodSystem->createSound(filename, FMOD_LOOP_NORMAL , 0, &m_eventSound);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK) 
 		return false;
@@ -143,11 +143,11 @@ void CAudio::FmodErrorCheck(FMOD_RESULT result)
 	}
 }
 
-void CAudio::Update(CCamera *camera, glm::vec3 ballpos)
+void CAudio::Update(CCamera *camera, glm::vec3 ballpos, glm::vec3 velocity)
 {
 	//update the ball pos 
 	ToFMODVector(ballpos, &m_ballpos);
-	ToFMODVector(vel, &posVel);
+	ToFMODVector(velocity, &posVel);
 	//update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
 	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);

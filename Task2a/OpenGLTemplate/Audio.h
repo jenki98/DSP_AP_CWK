@@ -18,7 +18,7 @@ public:
 	bool PlayMusicStream();
 	void ToggleMusicFilter();
 	void UpdateMusicPosition();
-	void Update(CCamera* cam , glm::vec3 ballpos);
+	void Update(CCamera* cam , glm::vec3 ballpos, glm::vec3 velocity);
 	void set_doppler(float doppler) { m_doppler = doppler; }
 	void set_speed(float speed) { m_speed = speed; }
 
