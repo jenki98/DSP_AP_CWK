@@ -44,7 +44,7 @@ private:
 	FMOD_VECTOR m_ballpos;
 	FMOD_VECTOR camPos;
 	FMOD_VECTOR posVel;
-	glm::vec3 vel = glm::vec3(4.0f);
 	float m_doppler;
 	float m_speed;
+	glm::vec3 vel = glm::vec3(4.f);
 };
