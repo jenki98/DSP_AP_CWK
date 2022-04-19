@@ -174,8 +174,9 @@ void CAudio::Update(CCamera *camera)
 
 	FMOD_VECTOR vel_listener = { 0, 0, 0 };
 	FMOD_VECTOR forward_listener = { 0, 0, -1 };
-	FMOD_VECTOR up_listener = { 0, 1, 0 };
-
+	FMOD_VECTOR up_listener;
+	ToFMODVector(camera->GetUpVector(), &up_listener);
+	//ToFMODVector(camera->, &up_listener);
 	// 5) update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
 	//result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);

@@ -18,6 +18,8 @@ public:
 	bool LoadMusicStream(char *filename);
 	bool PlayMusicStream();
 	void Update();
+	void AddCoeff(float value);
+	void ModifyCoeff(float value);
 
 private:
 
@@ -27,7 +29,8 @@ private:
 
 	FMOD::Sound *m_music;
 	FMOD::Channel *m_musicChannel;
-
+	
 	FMOD::DSP *m_dsp;
+	
 
 };

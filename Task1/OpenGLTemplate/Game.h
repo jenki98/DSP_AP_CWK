@@ -40,7 +40,7 @@ private:
 	double m_dt;
 	int m_framesPerSecond;
 	bool m_appActive;
-
+	float CoeffValue ;
 
 public:
 	Game();
@@ -58,6 +58,7 @@ private:
 	HINSTANCE m_hInstance;
 	int m_frameCount;
 	double m_elapsedTime;
+	
 
 
 };

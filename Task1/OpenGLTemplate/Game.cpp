@@ -167,6 +167,7 @@ void Game::Initialise()
 	m_pAudio->LoadEventSound("Resources\\Audio\\Boing.wav");					// Royalty free sound from freesound.org
 	m_pAudio->LoadMusicStream("Resources\\Audio\\cw_amen12_137.wav");	// Royalty free music from http://www.nosoapradio.us/
 	m_pAudio->PlayMusicStream();
+	CoeffValue = 0.1f;
 }
 
 // Render method runs repeatedly in a loop
@@ -287,6 +288,7 @@ void Game::Update()
 	m_pCamera->Update(m_dt);
 
 	m_pAudio->Update();
+
 }
 
 
@@ -323,6 +325,15 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 20, 20, "FPS: %d", m_framesPerSecond);
+
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 40, 20, "Coeff Value: %d", (int)CoeffValue);
 	}
 }
 
@@ -427,6 +438,17 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			break;
 		case '1':
 			m_pAudio->PlayEventSound();
+			break;
+		case '2':
+			m_pAudio->AddCoeff(CoeffValue);
+			break;
+		case '3':
+			CoeffValue+=0.1f;
+			m_pAudio->ModifyCoeff(CoeffValue);
+			break;
+		case '4':
+			CoeffValue -=0.1f;
+			m_pAudio->ModifyCoeff(CoeffValue);
 			break;
 		case VK_F1:
 			m_pAudio->PlayEventSound();

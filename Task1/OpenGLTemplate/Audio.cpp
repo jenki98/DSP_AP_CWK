@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include <vector>
 
 #pragma comment(lib, "lib/fmod_vc.lib")
 
@@ -7,13 +8,16 @@ I've made these two functions non-member functions
 */
 
 // Check for error
+std::vector <float> coeff = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 
 typedef struct
 {
-	 float *buffer;
+	float *buffer;
 	float volume_linear;
 	int   length_samples;
 	int   channels;
+	
 } mydsp_data_t;
 
 
@@ -47,19 +51,28 @@ FMOD_RESULT F_CALLBACK DSPCallbackDelay(FMOD_DSP_STATE* dsp_state, float* inbuff
 	return FMOD_OK;
 }
 
+
+//inbuffer[samp * inchannels + chan] * 0.20 +
 FMOD_RESULT F_CALLBACK DSPCallbackAveragingFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
 	unsigned int length, int inchannels, int* outchannels)
 {
+	mydsp_data_t* mydata = (mydsp_data_t*)dsp_state->plugindata;
+
+	//mydata->coeff.size()
 	for (unsigned int samp = 0; samp < length; samp++)
 	{
 		for (int chan = 0; chan < *outchannels; chan++)
 		{
 			buffer.Put(inbuffer[samp * inchannels + chan]);
-			outbuffer[(samp * *outchannels) + chan] =
-				(inbuffer[samp * inchannels + chan] +
-					buffer.AtPosition(samp - 1 * inchannels + chan) +
-					buffer.AtPosition(samp - 2 * inchannels + chan) +
-					buffer.AtPosition(samp - 3 * inchannels + chan)) / 4.f;
+			
+			float ans = 0;
+			for (int i = 0; i < coeff.size(); i++) {
+
+				ans += buffer.AtPosition(samp-i * inchannels + chan) * coeff[i];
+			}
+			
+
+			outbuffer[(samp * *outchannels) + chan] = ans;
 		}
 	}
 	return FMOD_OK;
@@ -70,7 +83,7 @@ FMOD_RESULT F_CALLBACK myDSPSetParameterFloatCallback(FMOD_DSP_STATE* dsp_state,
 	if (index == 1)
 	{
 		mydsp_data_t* mydata = (mydsp_data_t*)dsp_state->plugindata;
-
+		int i = mydata->volume_linear;
 		mydata->volume_linear = value;
 
 		return FMOD_OK;
@@ -78,6 +91,8 @@ FMOD_RESULT F_CALLBACK myDSPSetParameterFloatCallback(FMOD_DSP_STATE* dsp_state,
 
 	return FMOD_ERR_INVALID_PARAM;
 }
+
+
 // DSP callback
 //FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int* outchannels)
 //{
@@ -95,7 +110,7 @@ FMOD_RESULT F_CALLBACK myDSPSetParameterFloatCallback(FMOD_DSP_STATE* dsp_state,
 //		}
 //	}
 //
-//	return FMOD_OK;
+/////	return FMOD_OK;
 //}
 
 
@@ -215,4 +230,20 @@ bool CAudio::PlayMusicStream()
 void CAudio::Update()
 {
 	m_FmodSystem->update();
+	
+}
+
+
+
+void CAudio::AddCoeff(float value)
+{
+	coeff.push_back(value);
+
+}
+void CAudio::ModifyCoeff(float value)
+{
+	for (int i = 0; i < coeff.size(); i++) {
+		coeff[i] = value;
+	}
+
 }
