@@ -30,6 +30,9 @@ bool CAudio::Initialise()
 bool CAudio::LoadEventSound(char *filename)
 {
 	result = m_FmodSystem->createSound(filename, FMOD_LOOP_NORMAL , 0, &m_eventSound);
+	result = m_FmodSystem->createDSPByType(FMOD_DSP_TYPE_LOWPASS, &m_eventFilter);
+	m_eventFilter->setActive(true);
+
 	FmodErrorCheck(result);
 	if (result != FMOD_OK) 
 		return false;
