@@ -1,6 +1,0 @@
-﻿  Audio.cpp
-D:\callu\Documents\Master Repos\Audio\groupwork3\Task1\OpenGLTemplate\Audio.cpp(45,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\callu\Documents\Master Repos\Audio\groupwork3\Task1\OpenGLTemplate\Audio.cpp(69,22): warning C4018: '<': signed/unsigned mismatch
-D:\callu\Documents\Master Repos\Audio\groupwork3\Task1\OpenGLTemplate\Audio.cpp(86,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\callu\Documents\Master Repos\Audio\groupwork3\Task1\OpenGLTemplate\Audio.cpp(245,20): warning C4018: '<': signed/unsigned mismatch
-  OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork3\Task1\Debug\OpenGLTemplate.exe

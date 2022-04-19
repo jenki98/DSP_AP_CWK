@@ -1,0 +1,36 @@
+#pragma once
+#include <windows.h>									// Header File For The Windows Library
+#include "./include/fmod_studio/fmod.hpp"
+#include "./include/fmod_studio/fmod_errors.h"
+#include "CircularBuffer.h"
+
+
+
+
+class CAudio
+{
+public:
+	CAudio();
+	~CAudio();
+	bool Initialise();
+	bool LoadEventSound(char *filename);
+	bool PlayEventSound();
+	bool LoadMusicStream(char *filename);
+	bool PlayMusicStream();
+	void Update();
+	void AddCoeff(float value);
+	void ModifyCoeff(float value);
+
+private:
+
+	FMOD_RESULT result;
+	FMOD::System *m_FmodSystem;	// the global variable for talking to FMOD
+	FMOD::Sound *m_eventSound;
+
+	FMOD::Sound *m_music;
+	FMOD::Channel *m_musicChannel;
+	
+	FMOD::DSP *m_dsp;
+	
+
+};

@@ -1,0 +1,6 @@
+﻿  Audio.cpp
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(45,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(69,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(86,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(251,20): warning C4018: '<': signed/unsigned mismatch
+  OpenGLTemplate.vcxproj -> C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\Debug\OpenGLTemplate.exe
