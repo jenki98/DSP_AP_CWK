@@ -17,7 +17,6 @@ public:
 	bool LoadMusicStream(char *filename);
 	bool PlayMusicStream();
 	void ToggleMusicFilter();
-	void UpdateMusicPosition();
 	void Update(CCamera* cam , glm::vec3 ballpos, glm::vec3 velocity);
 	void set_doppler(float doppler) { m_doppler = doppler; }
 	void set_speed(float speed) { m_speed = speed; }
@@ -36,6 +35,7 @@ private:
 	
 	FMOD::Sound *m_music;
 	FMOD::DSP *m_musicFilter;
+	FMOD::DSP* m_eventFilter;
 	bool m_musicFilterActive;
 	FMOD::Channel* m_musicChannel;
 	FMOD::DSP *m_musicDSPHead;
