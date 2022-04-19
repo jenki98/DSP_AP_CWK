@@ -6,6 +6,7 @@ ipch/
 *.opendb
 *.opensdf
 *.sdf
+*.suo
 *.cachefile
 *.VC.db
 *.VC.db-shm
