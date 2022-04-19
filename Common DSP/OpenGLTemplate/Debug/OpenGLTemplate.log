@@ -1,2 +1,7 @@
-﻿  Game.cpp
-  OpenGLTemplate.vcxproj -> C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Task1\Debug\OpenGLTemplate.exe
+﻿  Audio.cpp
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(45,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(67,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(220,20): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+  Generating Code...
+  OpenGLTemplate.vcxproj -> C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Common DSP\Debug\OpenGLTemplate.exe

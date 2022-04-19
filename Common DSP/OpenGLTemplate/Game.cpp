@@ -348,14 +348,21 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 80, 20, "INCREASE COEFF: KEY 3");
+		m_pFtFont->Render(20, height - 80, 20, "REMOVE SAMPLE: KEY 3");
 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 100, 20, "DECREASE COEFF: KEY 4");
+		m_pFtFont->Render(20, height - 100, 20, "INCREASE COEFF: KEY 4");
+
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 120, 20, "DECREASE COEFF: KEY 5:");
 	}
 }
 
@@ -465,10 +472,14 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			m_pAudio->AddCoeff(CoeffValue);
 			break;
 		case '3':
+			CoeffValue += 0.1f;
+			m_pAudio->RemoveCoeff();
+			break;
+		case '4':
 			CoeffValue+=0.1f;
 			m_pAudio->ModifyCoeff(CoeffValue);
 			break;
-		case '4':
+		case '5':
 			CoeffValue -=0.1f;
 			m_pAudio->ModifyCoeff(CoeffValue);
 			break;

@@ -164,9 +164,9 @@ void Game::Initialise()
 
 	// Initialise audio and play background music
 	m_pAudio->Initialise();
-	m_pAudio->LoadEventSound("Resources\\Audio\\Boing.wav");					// Royalty free sound from freesound.org
+	m_pAudio->LoadEventSound("Resources\\Audio\\car.mp3");					// Royalty free sound from freesound.org
 	m_pAudio->LoadMusicStream("Resources\\Audio\\cw_amen12_137.wav");	// Royalty free music from http://www.nosoapradio.us/
-	m_pAudio->PlayMusicStream();
+	//m_pAudio->PlayMusicStream();
 	CoeffValue = 0.1f;
 }
 
@@ -264,13 +264,13 @@ void Game::Render()
 
 	// Render the sphere
 	modelViewMatrixStack.Push();
-		modelViewMatrixStack.Translate(glm::vec3(0.0f, 2.0f, 150.0f));
-		modelViewMatrixStack.Scale(2.0f);
-		pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
-		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
-		// To turn off texture mapping and use the sphere colour only (currently white material), uncomment the next line
-		//pMainProgram->SetUniform("bUseTexture", false);
-		m_pSphere->Render();
+	modelViewMatrixStack.Translate(m_ballpos);
+	modelViewMatrixStack.Scale(20.0f);
+	pMainProgram->SetUniform("matrices.modelViewMatrix", modelViewMatrixStack.Top());
+	pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
+	// To turn off texture mapping and use the sphere colour only (currently white material), uncomment the next line
+	//pMainProgram->SetUniform("bUseTexture", false);
+	m_pSphere->Render();
 	modelViewMatrixStack.Pop();
 		
 	// Draw the 2D graphics after the 3D graphics
@@ -286,11 +286,20 @@ void Game::Update()
 {
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
+	MoveBall();
+	m_pAudio->Update(m_pCamera, m_ballpos);
+	m_pAudio->set_speed(m_speed);
 
-	m_pAudio->Update();
 
 }
-
+void Game::MoveBall() {
+	
+	m_angle += 0.05f;
+	m_ballpos.x = m_radius * cos(m_angle * m_speed);
+	m_ballpos.z = m_radius * sin(m_angle * m_speed);
+	glm::vec3 i = m_pCamera->GetPosition();
+	//m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);
+}
 
 
 void Game::DisplayFrameRate()
@@ -333,29 +342,55 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 40, 20, "Coeff Value: %d", (int)CoeffValue);
-
-		
-		fontProgram->UseProgram();
-		glDisable(GL_DEPTH_TEST);
-		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
-		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
-		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 60, 20, "ADD SAMPLE: KEY 2");
+		m_pFtFont->Render(20, height - 40, 20, "SPEED: %d", (int)m_speed);
 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 80, 20, "INCREASE COEFF: KEY 3");
+		m_pFtFont->Render(20, height - 60, 20, "ADD SAMPLE: 2");
 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 100, 20, "DECREASE COEFF: KEY 4");
+		m_pFtFont->Render(20, height - 80, 20, "REMOVE SAMPLE: 3");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 100, 20, "INCREASE SPEED: 5");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 120, 20, "DECREASE SPEED: 6");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 140, 20, "INCREASE RADIUS: 7");
+
+		// Use the font shader program and render the text
+		fontProgram->UseProgram();
+		glDisable(GL_DEPTH_TEST);
+		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
+		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
+		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pFtFont->Render(20, height - 160, 20, "DECREASE RADIUS: 8");
+
+
 	}
 }
 
@@ -461,19 +496,30 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 		case '1':
 			m_pAudio->PlayEventSound();
 			break;
-		case '2':
-			m_pAudio->AddCoeff(CoeffValue);
-			break;
-		case '3':
-			CoeffValue+=0.1f;
-			m_pAudio->ModifyCoeff(CoeffValue);
-			break;
-		case '4':
-			CoeffValue -=0.1f;
-			m_pAudio->ModifyCoeff(CoeffValue);
-			break;
 		case VK_F1:
 			m_pAudio->PlayEventSound();
+			break;
+		case '2':
+			m_pAudio->AddCoeff();
+			break;
+		case '3':
+			m_pAudio->RemoveCoeff();
+			break;
+		case '5':
+			m_speed += 0.1f;
+			break;
+		case '6':
+			if (m_speed > 0) {
+				m_speed -= 0.1f;
+			}
+			break;
+		case '7':
+			m_radius += 10.f;
+			break;
+		case '8':
+			if (m_radius > 0) {
+				m_radius -= 10.1f;
+			}
 			break;
 		}
 		break;

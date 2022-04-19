@@ -298,9 +298,7 @@ void Game::Update()
 
 
 void Game::MoveBall() {
-	/*m_angle += 0.05f *m_speed;
-	m_ballpos.x = m_ballpos.x + cos(m_angle) * 5.5f * m_speed;
-	m_ballpos.z = m_ballpos.z + sin(m_angle) * 5.5f * m_speed;*/
+	
 
 	m_angle += 0.05f;
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);

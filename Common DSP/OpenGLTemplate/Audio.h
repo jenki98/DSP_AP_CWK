@@ -19,6 +19,7 @@ public:
 	bool PlayMusicStream();
 	void Update();
 	void AddCoeff(float value);
+	void RemoveCoeff();
 	void ModifyCoeff(float value);
 
 private:

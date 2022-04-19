@@ -11,14 +11,14 @@ I've made these two functions non-member functions
 std::vector <float> coeff = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 
-typedef struct
-{
-	float *buffer;
-	float volume_linear;
-	int   length_samples;
-	int   channels;
-	
-} mydsp_data_t;
+//typedef struct
+//{
+//	float *buffer;
+//	float volume_linear;
+//	int   length_samples;
+//	int   channels;
+//	
+//} mydsp_data_t;
 
 
 
@@ -52,11 +52,9 @@ FMOD_RESULT F_CALLBACK DSPCallbackDelay(FMOD_DSP_STATE* dsp_state, float* inbuff
 }
 
 
-//inbuffer[samp * inchannels + chan] * 0.20 +
-FMOD_RESULT F_CALLBACK DSPCallbackAveragingFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
+FMOD_RESULT F_CALLBACK DSPCallbackFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
 	unsigned int length, int inchannels, int* outchannels)
 {
-	mydsp_data_t* mydata = (mydsp_data_t*)dsp_state->plugindata;
 
 	//mydata->coeff.size()
 	for (unsigned int samp = 0; samp < length; samp++)
@@ -78,58 +76,29 @@ FMOD_RESULT F_CALLBACK DSPCallbackAveragingFIR(FMOD_DSP_STATE* dsp_state, float*
 	return FMOD_OK;
 }
 
-FMOD_RESULT F_CALLBACK myDSPSetParameterFloatCallback(FMOD_DSP_STATE* dsp_state, int index, float value)
-{
-	if (index == 1)
-	{
-		mydsp_data_t* mydata = (mydsp_data_t*)dsp_state->plugindata;
-		int i = mydata->volume_linear;
-		mydata->volume_linear = value;
 
-		return FMOD_OK;
-	}
-
-	return FMOD_ERR_INVALID_PARAM;
-}
 
 
 // DSP callback
-//FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int* outchannels)
-//{
-//	FMOD::DSP* thisdsp = (FMOD::DSP*)dsp_state->instance;
-//
-//	for (unsigned int samp = 0; samp < length; samp++)
-//	{
-//		for (int chan = 0; chan < *outchannels; chan++)
-//		{
-//			/*
-//			This DSP filter just halves the volume!
-//			Input is modified, and sent to output.
-//			*/
-//			outbuffer[(samp * *outchannels) + chan] = inbuffer[(samp * inchannels) + chan] * 0.2f;
-//		}
-//	}
-//
-/////	return FMOD_OK;
-//}
-
-
-FMOD_RESULT F_CALLBACK myDSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
-	unsigned int length, int inchannels, int* outchannels)
+FMOD_RESULT F_CALLBACK DSPCallback(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int* outchannels)
 {
-	mydsp_data_t* data = (mydsp_data_t*)dsp_state->plugindata;
+	FMOD::DSP* thisdsp = (FMOD::DSP*)dsp_state->instance;
 
 	for (unsigned int samp = 0; samp < length; samp++)
 	{
 		for (int chan = 0; chan < *outchannels; chan++)
 		{
-			data->buffer[(samp * *outchannels) + chan] =
-				inbuffer[(samp * inchannels) + chan] * data->volume_linear;
-			outbuffer[(samp * inchannels) + chan] = data->buffer[(samp * *outchannels) + chan];
+			/*
+			This DSP filter just halves the volume!
+			Input is modified, and sent to output.
+			*/
+			outbuffer[(samp * *outchannels) + chan] = inbuffer[(samp * inchannels) + chan] * 0.2f;
 		}
 	}
+
 	return FMOD_OK;
 }
+
 
 
 CAudio::CAudio()
@@ -162,7 +131,7 @@ bool CAudio::Initialise()
 		strncpy_s(dspdesc.name, "My first DSP unit", sizeof(dspdesc.name));
 		dspdesc.numinputbuffers = 4;
 		dspdesc.numoutputbuffers = 4;
-		dspdesc.read = DSPCallbackAveragingFIR;
+		dspdesc.read = DSPCallbackFIR;
 
 		result = m_FmodSystem->createDSP(&dspdesc, &m_dsp);
 		FmodErrorCheck(result);
@@ -240,6 +209,12 @@ void CAudio::AddCoeff(float value)
 	coeff.push_back(value);
 
 }
+void CAudio::RemoveCoeff()
+{
+	coeff.pop_back();
+
+}
+
 void CAudio::ModifyCoeff(float value)
 {
 	for (int i = 0; i < coeff.size(); i++) {
