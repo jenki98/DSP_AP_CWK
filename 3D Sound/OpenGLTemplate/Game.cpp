@@ -169,6 +169,7 @@ void Game::Initialise()
 	m_pAudio->LoadMusicStream("Resources\\Audio\\Horse.wav");	// Royalty free music from http://www.nosoapradio.us/
 	//m_pAudio->PlayMusicStream();
 	m_pCamera->Set(glm::vec3(-2, 15, 0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0));
+	//play the horn sound (it loops)
 	m_pAudio->PlayEventSound();
 }
 
@@ -289,21 +290,23 @@ void Game::Update()
 	
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
-
+	//code to move the ball
 	MoveBall();
+	//update audio, passing it the cameras position, balls position and velocity 
 	m_pAudio->Update(m_pCamera, m_ballpos, m_ballVelocity);
-	m_pAudio->set_doppler(doppler);
-	m_pAudio->set_speed(m_speed);
+
 }
 
-
+//moves the ball around in a circular shape 
 void Game::MoveBall() {
 	
-
+	//increase theangle
 	m_angle += 0.05f;
+	//change x pos 
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);
+	//change y [ps
 	m_ballpos.z = m_radius * sin(m_angle * m_speed);
-	glm::vec3 i = m_pCamera->GetPosition();
+	//update the balls velocity
 	m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);
 }
 void Game::DisplayFrameRate()
@@ -486,6 +489,7 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			PostQuitMessage(0);
 			break;
 		case '1':
+			//play the event sound 
 			m_pAudio->PlayEventSound();
 			break;
 		case '2':
@@ -493,25 +497,26 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			break;
 
 		case '5':
+				//increase the speed of the ball
 			m_speed += 0.1f;
 			break;
 		case '6':
 			if (m_speed > 0) {
+				//decrease the speed of the ball
 				m_speed -= 0.1f;
 			}
 			break;
 		case '7':
+			//increase the radius 
 			m_radius += 10.f;
 			break;
 		case '8':
 			if (m_radius > 0) {
+				//decrease the radius 
 				m_radius -= 10.1f;
 			}
 			break;
-		case '9':
-			doppler += 1.0f;
-			break;
-		
+
 		case VK_F1:
 			m_pAudio->PlayEventSound();
 			break;

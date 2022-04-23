@@ -8,6 +8,8 @@ CAudio::CAudio()
 CAudio::~CAudio()
 {}
 
+//initaliser for audio class
+//returns true or false to indicate if sucessfull 
 bool CAudio::Initialise()
 {
 	// Create an FMOD system
@@ -26,7 +28,11 @@ bool CAudio::Initialise()
 	
 }
 
+// 
 // Load an event sound
+// takes in file nam as a parameter
+//returns true or false to indicate if sucessfull 
+// 
 bool CAudio::LoadEventSound(char *filename)
 {
 	result = m_FmodSystem->createSound(filename, FMOD_LOOP_NORMAL , 0, &m_eventSound);
@@ -40,19 +46,24 @@ bool CAudio::LoadEventSound(char *filename)
 	return true;
 }
 
-// Play an event sound
+///
+// Play an event sound at the balls positon 
+// Uses 3d sound including doppler and distance rolloff
+//returns true if successfull false if not 
+///
+
 bool CAudio::PlayEventSound()
 {
-	
-
+	//play the sound
 	result = m_FmodSystem->playSound(m_eventSound, NULL, false, &m_eventChannel);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
 	// play through 3D channel
 	m_eventChannel->setMode(FMOD_3D);
-	//  set the position to be the balls's position
+	//  set the inital  position to be the balls's position
 	result = m_eventChannel->set3DAttributes(&m_ballpos,0,0);
+	// initalise  the 3d settings (doppler, distance , rolloff)
 	result = m_FmodSystem->set3DSettings(4.f, 1.f, 1.0f);
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
@@ -63,6 +74,8 @@ bool CAudio::PlayEventSound()
 
 
 // Load a music stream
+// take a file name as input 
+//returns true or false to indicate if sucessfull 
 bool CAudio::LoadMusicStream(char *filename)
 {
 
@@ -87,6 +100,7 @@ bool CAudio::LoadMusicStream(char *filename)
 }
 
 // Play a music stream
+//returns true or false to indicate if sucessfull 
 bool CAudio::PlayMusicStream()
 {
 
@@ -142,12 +156,15 @@ void CAudio::FmodErrorCheck(FMOD_RESULT result)
 
 void CAudio::Update(CCamera *camera, glm::vec3 ballpos, glm::vec3 velocity)
 {
-	//update the ball pos 
+	//update the ball pos as a fmodvec
 	ToFMODVector(ballpos, &m_ballpos);
+	//update the velocity as a fmodvec
 	ToFMODVector(velocity, &posVel);
 	//update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
+	//set the listener attributes to the cameras position 
 	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
+	//set 3d attributes to the balls position and velocity
 	result = m_eventChannel->set3DAttributes(&m_ballpos, &posVel, 0);
 
 	FmodErrorCheck(result);
@@ -173,7 +190,8 @@ void CAudio::ToggleMusicFilter()
 
 
 
-
+// convert a vector 3 to a fmod vec 
+//parameters are the original vector and the fmodvector pointer you want to put the value in
 void CAudio::ToFMODVector(glm::vec3& glVec3, FMOD_VECTOR* fmodVec)
 {
 	fmodVec->x = glVec3.x;
