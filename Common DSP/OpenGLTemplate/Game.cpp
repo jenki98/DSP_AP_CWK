@@ -334,8 +334,9 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 40, 20, "Coeff Value: %d", (int)CoeffValue);
-
 		
+		// Use the font shader program and render the text
+		//Display controlls 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
@@ -343,6 +344,8 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 60, 20, "ADD SAMPLE: KEY 2");
 
+		// Use the font shader program and render the text
+		//Display controlls 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
@@ -350,19 +353,23 @@ void Game::DisplayFrameRate()
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pFtFont->Render(20, height - 80, 20, "REMOVE SAMPLE: KEY 3");
 
+		// Use the font shader program and render the text
+		//Display controlls 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 100, 20, "INCREASE COEFF: KEY 4");
+		m_pFtFont->Render(20, height - 100, 20, "INCREASE COEFF VALUE: KEY 4");
 
+		// Use the font shader program and render the text
+		//Display controlls 
 		fontProgram->UseProgram();
 		glDisable(GL_DEPTH_TEST);
 		fontProgram->SetUniform("matrices.modelViewMatrix", glm::mat4(1));
 		fontProgram->SetUniform("matrices.projMatrix", m_pCamera->GetOrthographicProjectionMatrix());
 		fontProgram->SetUniform("vColour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pFtFont->Render(20, height - 120, 20, "DECREASE COEFF: KEY 5:");
+		m_pFtFont->Render(20, height - 120, 20, "DECREASE COEFF VALUE: KEY 5:");
 	}
 }
 
@@ -466,21 +473,27 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 			PostQuitMessage(0);
 			break;
 		case '1':
+			//play the sound 
 			m_pAudio->PlayEventSound();
 			break;
 		case '2':
+			//Add another coefficent to the array 
 			m_pAudio->AddCoeff(CoeffValue);
 			break;
 		case '3':
-			CoeffValue += 0.1f;
+			//remove a coefficent from the array
 			m_pAudio->RemoveCoeff();
 			break;
 		case '4':
+			//increase the value of the coefficent by 0.1
 			CoeffValue+=0.1f;
+			//modify all the coefficients in the array to be the same value 
 			m_pAudio->ModifyCoeff(CoeffValue);
 			break;
 		case '5':
+			//decrease the value of the coefficent by 0.1
 			CoeffValue -=0.1f;
+			//modify all the coefficients in the array to be the same value 
 			m_pAudio->ModifyCoeff(CoeffValue);
 			break;
 		case VK_F1:

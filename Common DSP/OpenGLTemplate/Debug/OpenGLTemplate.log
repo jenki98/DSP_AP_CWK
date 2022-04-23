@@ -1,5 +1,7 @@
 ﻿  Audio.cpp
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(45,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(67,22): warning C4018: '<': signed/unsigned mismatch
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(222,20): warning C4018: '<': signed/unsigned mismatch
+D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(33,96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(63,22): warning C4018: '<': signed/unsigned mismatch
+D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\OpenGLTemplate\Audio.cpp(224,20): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+  Generating Code...
   OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Common DSP\Debug\OpenGLTemplate.exe

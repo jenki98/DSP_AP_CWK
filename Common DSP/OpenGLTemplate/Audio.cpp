@@ -3,22 +3,10 @@
 
 #pragma comment(lib, "lib/fmod_vc.lib")
 
-/*
-I've made these two functions non-member functions
-*/
 
-// Check for error
+
+// delare the array of coefficients for use in our filter
 std::vector <float> coeff = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-
-//typedef struct
-//{
-//	float *buffer;
-//	float volume_linear;
-//	int   length_samples;
-//	int   channels;
-//	
-//} mydsp_data_t;
 
 
 
@@ -52,26 +40,33 @@ FMOD_RESULT F_CALLBACK DSPCallbackDelay(FMOD_DSP_STATE* dsp_state, float* inbuff
 }
 
 
+///
+// controllable FIR filter for TASK 1
+//parameters dsp_state, inbuffer, outbuffer, length, inchannels, outchannels
+//return  FMOD_OK;
+///
+
+
 FMOD_RESULT F_CALLBACK DSPCallbackFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer, float* outbuffer,
 	unsigned int length, int inchannels, int* outchannels)
 {
-
-	//mydata->coeff.size()
+	//loop through samples
 	for (unsigned int samp = 0; samp < length; samp++)
 	{
+		//loop through channels
 		for (int chan = 0; chan < *outchannels; chan++)
 		{
+			//get the first sample 
 			buffer.Put(inbuffer[samp * inchannels + chan]);
-			
+			//loop with iterations equal to amount of coefficients 
 			float ans = 0;
 			for (int i = 0; i < coeff.size(); i++) {
-
-				/*ans += buffer.AtPosition(samp-i * inchannels + chan) * coeff[i];*/
+				//add the aditional samples
 				ans += buffer.AtPosition(buffer.PutCount() -i) * coeff[i];
 
 			}
 			
-
+		
 			outbuffer[(samp * *outchannels) + chan] = ans;
 		}
 	}
@@ -205,21 +200,29 @@ void CAudio::Update()
 }
 
 
-
+//Adds a Coefficint to the array of coefficents
+//parameters: value(value of the coeff to be inserted)
 void CAudio::AddCoeff(float value)
 {
 	coeff.push_back(value);
 
 }
+
+//Removes a Coefficint from  the array of coefficents
+
 void CAudio::RemoveCoeff()
 {
 	coeff.pop_back();
 
 }
 
+//Changes all the coefficent values in the array to be the same
+//parameters: value(value to change all the coeffs to)
 void CAudio::ModifyCoeff(float value)
 {
+	//loop through the array
 	for (int i = 0; i < coeff.size(); i++) {
+		//change the array position to the value from the parameter
 		coeff[i] = value;
 	}
 
