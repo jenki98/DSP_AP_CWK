@@ -66,7 +66,9 @@ FMOD_RESULT F_CALLBACK DSPCallbackFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer
 			float ans = 0;
 			for (int i = 0; i < coeff.size(); i++) {
 
-				ans += buffer.AtPosition(samp-i * inchannels + chan) * coeff[i];
+				/*ans += buffer.AtPosition(samp-i * inchannels + chan) * coeff[i];*/
+				ans += buffer.AtPosition(buffer.PutCount() -i) * coeff[i];
+
 			}
 			
 
