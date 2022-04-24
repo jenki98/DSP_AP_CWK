@@ -6,8 +6,7 @@
 /*
 I've made these two functions non-member functions
 */
-
-// Check for error
+//Set the intial coeff values
 std::vector <float> coeff = { 1.5f, 1.5f, 1.5f, 1.5f };
 float speed;
 
@@ -51,7 +50,7 @@ FMOD_RESULT F_CALLBACK DSPCallbackFIR(FMOD_DSP_STATE* dsp_state, float* inbuffer
 			float ans = 0;
 			for (int i = 0; i < coeff.size(); i++) {
 
-				ans += buffer.AtPosition(samp-i * inchannels + chan) * coeff[i] * speed;
+				ans += buffer.AtPosition(buffer.PutCount() - i) * coeff[i] * speed;
 			}
 			
 
@@ -94,6 +93,8 @@ CAudio::CAudio()
 CAudio::~CAudio()
 {}
 
+//initaliser for audio class
+//returns true or false to indicate if sucessfull 
 bool CAudio::Initialise()
 {
 	// Create an FMOD system
@@ -132,7 +133,11 @@ bool CAudio::Initialise()
 	
 }
 
+// 
 // Load an event sound
+// takes in file nam as a parameter
+//returns true or false to indicate if sucessfull 
+// 
 bool CAudio::LoadEventSound(char *filename)
 {
 	result = m_FmodSystem->createSound(filename, FMOD_LOOP_NORMAL, 0, &m_eventSound);
@@ -146,7 +151,11 @@ bool CAudio::LoadEventSound(char *filename)
 
 }
 
-// Play an event sound
+////
+// Play an event sound at the balls positon 
+// Uses 3d sound
+//returns true if successfull false if not 
+///
 bool CAudio::PlayEventSound()
 {
 	result = m_FmodSystem->playSound(m_eventSound, NULL, false, &m_eventChannel);
@@ -154,9 +163,13 @@ bool CAudio::PlayEventSound()
 	FmodErrorCheck(result);
 	if (result != FMOD_OK)
 		return false;
+	// play through 3D channel
 	m_eventChannel->setMode(FMOD_3D);
+	//  set the inital  position to be the balls's position
 	result = m_eventChannel->set3DAttributes(&m_ballpos, 0 ,0);
+	// initalise  the 3d settings (without doppler, distance , rolloff)
 	result = m_FmodSystem->set3DSettings(0.f, 1.f, 1.0f);
+	//adding our custom dsp to the event channel
 	m_eventChannel->addDSP(0, m_dsp);
 
 	return true;
@@ -193,23 +206,32 @@ bool CAudio::PlayMusicStream()
 
 void CAudio::Update(CCamera* camera, glm::vec3 ballpos)
 {
+	//update the ball pos as a fmodvec
 	ToFMODVector(ballpos, &m_ballpos);
+	//update the listener's position with the camera position
 	ToFMODVector(camera->GetPosition(), &camPos);
-	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);
+	//set the listener attributes to the cameras position 
+	result = m_FmodSystem->set3DListenerAttributes(0, &camPos, NULL, NULL, NULL);	
+	//set 3d attributes to the balls position and velocity
 	result = m_eventChannel->set3DAttributes(&m_ballpos, 0, 0);
+	//Get the speed of the object to change the coefficients
 	speed = m_speed;
 	m_FmodSystem->update();
 	
 }
 
 
-
+//Adds a Coefficint to the array of coefficents
+//parameters: value(value of the coeff to be inserted)
 void CAudio::AddCoeff()
 {
 	coeff.push_back(1.5f);
 	
 
 }
+
+//Removes a Coefficint from  the array of coefficents
+
 void CAudio::RemoveCoeff() {
 	coeff.pop_back();
 }

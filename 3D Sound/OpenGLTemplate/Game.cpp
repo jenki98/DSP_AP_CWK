@@ -304,7 +304,7 @@ void Game::MoveBall() {
 	m_angle += 0.05f;
 	//change x pos 
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);
-	//change y [ps
+	//change y pos
 	m_ballpos.z = m_radius * sin(m_angle * m_speed);
 	//update the balls velocity
 	m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);

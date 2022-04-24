@@ -166,8 +166,9 @@ void Game::Initialise()
 	m_pAudio->Initialise();
 	m_pAudio->LoadEventSound("Resources\\Audio\\car.mp3");					// Royalty free sound from freesound.org
 	m_pAudio->LoadMusicStream("Resources\\Audio\\cw_amen12_137.wav");	// Royalty free music from http://www.nosoapradio.us/
-	//m_pAudio->PlayMusicStream();
-	CoeffValue = 0.1f;
+	m_pAudio->PlayEventSound();
+
+	CoeffValue = 0.01f;
 }
 
 // Render method runs repeatedly in a loop
@@ -286,17 +287,24 @@ void Game::Update()
 {
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
+	//code to move the ball
 	MoveBall();
+	//update filter audio, passing it the cameras position, balls position and velocity 
 	m_pAudio->Update(m_pCamera, m_ballpos);
+	//set speed of the ball
 	m_pAudio->set_speed(m_speed);
 
 
 }
 void Game::MoveBall() {
-	
+
+	//increase theangle
 	m_angle += 0.05f;
+	//change x pos 
 	m_ballpos.x = m_radius * cos(m_angle * m_speed);
+	//change y pos 
 	m_ballpos.z = m_radius * sin(m_angle * m_speed);
+	//get the cameras position 
 	glm::vec3 i = m_pCamera->GetPosition();
 	//m_ballVelocity = m_speed * 10 * glm::vec3(1, 0, 0);
 }
@@ -493,31 +501,34 @@ LRESULT Game::ProcessEvents(HWND window,UINT message, WPARAM w_param, LPARAM l_p
 		case VK_ESCAPE:
 			PostQuitMessage(0);
 			break;
-		case '1':
-			m_pAudio->PlayEventSound();
-			break;
 		case VK_F1:
 			m_pAudio->PlayEventSound();
 			break;
 		case '2':
+			//increase the value of the coefficent by 0.1
 			m_pAudio->AddCoeff();
 			break;
 		case '3':
+			//decrease the value of the coefficent by 0.1
 			m_pAudio->RemoveCoeff();
 			break;
 		case '5':
+			//increase the speed of the ball
 			m_speed += 0.1f;
 			break;
 		case '6':
 			if (m_speed > 0) {
+				//decrease the speed of the ball
 				m_speed -= 0.1f;
 			}
 			break;
 		case '7':
+			//increase the radius 
 			m_radius += 10.f;
 			break;
 		case '8':
 			if (m_radius > 0) {
+				//decrease the radius 
 				m_radius -= 10.1f;
 			}
 			break;

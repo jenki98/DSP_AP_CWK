@@ -1,21 +1,3 @@
 ﻿  Audio.cpp
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(52,22): warning C4018: '<': signed/unsigned mismatch
-  Camera.cpp
-  CircularBuffer.cpp
-  Cubemap.cpp
-  FreeTypeFont.cpp
-  Game.cpp
-D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\game.h(65,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-  GameWindow.cpp
-  HighResolutionTimer.cpp
-  MatrixStack.cpp
-  OpenAssetImportMesh.cpp
-  Plane.cpp
-  Shaders.cpp
-  Skybox.cpp
-  Sphere.cpp
-  Texture.cpp
-  VertexBufferObject.cpp
-  VertexBufferObjectIndexed.cpp
-  Generating Code...
-  OpenGLTemplate.vcxproj -> D:\callu\Documents\Master Repos\Audio\groupwork\DSP_AP_CWK\Dynamic Filter Control\Debug\OpenGLTemplate.exe
+C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\OpenGLTemplate\Audio.cpp(52,22): warning C4018: '<': signed/unsigned mismatch
+  OpenGLTemplate.vcxproj -> C:\Users\Zaynab\Documents\MSc Computer Games Technology\Semester 2\DSP_AP\DSP_AP Coursework\DSP_AP_CWK\Dynamic Filter Control\Debug\OpenGLTemplate.exe
